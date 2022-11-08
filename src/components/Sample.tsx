@@ -1,4 +1,9 @@
-const Sample = () => {
-    return <h1>샘플 입니다</h1>
-}
+import React from "react";
+
+type Props = {};
+
+const Sample = (props: Props) => {
+  return <div>Sample</div>;
+};
+
 export default Sample;

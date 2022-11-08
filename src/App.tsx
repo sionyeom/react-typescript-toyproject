@@ -1,7 +1,7 @@
 import Sample from "@/components/Sample";
-
-const App = () => { 
-    return <Sample/>; 
-}
+import Counter from "./components/study/Counter";
+const App = () => {
+  return <Counter />;
+};
 
 export default App;
