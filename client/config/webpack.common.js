@@ -22,6 +22,9 @@ module.exports = {
     new webpack.ProvidePlugin({
       React: "react",
     }),
+    new webpack.EnvironmentPlugin({
+      REACT_APP_DB_URL: "http://localhost:8080/api",
+    }),
   ],
   resolve: {
     alias: {

@@ -47,8 +47,19 @@ exports.findAll = (req, res) => {
 
   // Retrieve all documents
   Tutorial.find(condition)
-    .then((data) => {
-      res.send(data);
+    .then(async (data) => {
+      let sendDataArr = [];
+
+      await data.map((e) => {
+        sendDataArr.push({
+          id: e._id,
+          title: e.title,
+          description: e.description,
+          createdAt: e.createdAt,
+        });
+      });
+
+      res.status(200).send(sendDataArr);
     })
     .catch((err) => {
       res.status(500).send({
