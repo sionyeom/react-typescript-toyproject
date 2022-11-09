@@ -81,38 +81,35 @@ exports.findOne = (req, res) => {
 };
 
 // Update document by id
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
   if (!req.body) {
     return res.status(400).send({
       message: "Data is empty!",
     });
   }
+  const updates = Object.keys(req.body);
+  const allowed = ["title", "description"];
+  const isValid = updates.every((update) => allowed.includes(update));
 
-  // Set id
-  const id = req.params.id;
-
-  // Update document by id
-  Tutorial.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
-    .then((data) => {
-      if (!data) {
-        res.status(404).send({
-          message: "Cannot update document. (id: " + id + ")",
-        });
-      } else {
-        res.send({
-          message: "Document updated.",
-        });
-      }
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Update document failure. (id: " + id + ")",
-      });
+  if (!isValid) {
+    return res.status(400).send({ error: "Invalid Updates." });
+  }
+  try {
+    const tutorial = await Tutorial.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
     });
+
+    if (!tutorial) res.status(404).send();
+
+    res.send(tutorial);
+  } catch (er) {
+    res.status(400).send();
+  }
 };
 
 // Delete document by id
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
   if (!req.body) {
     return res.status(400).send({
       message: "Data is empty!",
@@ -122,22 +119,11 @@ exports.delete = (req, res) => {
   // Set id
   const id = req.params.id;
 
-  // Delete document by id
-  Tutorial.findByIdAndRemove(id)
-    .then((data) => {
-      if (!data) {
-        res.status(404).send({
-          message: "Cannot delete document. (id: " + id + ")",
-        });
-      } else {
-        res.send({
-          message: "Document deleted.",
-        });
-      }
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Delete document failure. (id: " + id + ")",
-      });
-    });
+  try {
+    const tutorial = await Tutorial.findByIdAndDelete(id);
+    if (!tutorial) res.status(404).send();
+    res.send(tutorial);
+  } catch (err) {
+    res.status(500).send();
+  }
 };
