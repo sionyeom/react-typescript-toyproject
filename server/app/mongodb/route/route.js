@@ -11,7 +11,7 @@ router.get("/api/tutorial", tutorial.findAll);
 router.get("/api/tutorial/:id", tutorial.findOne);
 
 // Update document by id
-router.put("/api/tutorial/:id", tutorial.update);
+router.patch("/api/tutorial/:id", tutorial.update);
 
 // Delete document by id
 router.delete("/api/tutorial/:id", tutorial.delete);
